@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <title>BMIC</title>
+   <link rel="stylesheet" href="css/normalize.css">
+   <link rel="stylesheet" href="css/skeleton.css">
+   <style type="text/css">
+     html, body, #map_canvas, #sidebar{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    #fireStationList{
+        padding-left: 1em;
+    }
+   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+  <script type="text/javascript">
+    var map;
+    var geocodedAddress;
+    var geocoder = new google.maps.Geocoder();
+    var service;
+    var distmatrix;
+    var centerPos;
+    var place;
+    var fireStations;
+    var fireStationLocations;
+    var stationsNearby;    
+    var markers = new Array();
+
+    function initialize() {
+       var lat = 33.0672;
+       var lng = -86.791;
+       centerPos = new google.maps.LatLng(lat, lng);
+       var myOptions = {
+         center: centerPos,
+         zoom: 7,
+         mapTypeId: google.maps.MapTypeId.ROADMAP
+       };
+       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+       service = new google.maps.places.PlacesService(map);
+       distmatrix = new google.maps.DistanceMatrixService();
+     }
+     
+     function geocode(){
+       clearExisting();
+       address = document.getElementById("address").value;
+       geocoder.geocode( { 'address': address}, function(results, status) {
+         if (status == google.maps.GeocoderStatus.OK) {
+           geocodedAddress = results[0].geometry.location;
+           map.setCenter(geocodedAddress);
+           map.setZoom(13);
+           displayMarker("address",address,geocodedAddress,"standard");
+           getFireStationsInArea();
+         } else {
+           alert("Geocode was not successful for the following reason: " + status);
+         }
+       });
+     }
+           
+     function getFireStationsInArea(){
+        // find fire stations and duration/distance from location within a 10 mile as-the-crow-flies radius
+        service.nearbySearch({
+            location: geocodedAddress,
+            radius: 16000,
+            name: 'fire',
+            keyword: 'fire department',
+            types: ['fire_station']
+        }, function(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                fireStations = [];
+                fireStationLocations = [];
+                // pull out each fire departments' LatLng
+                $.each(results, function(i, v) {
+                    var fireStation = {name:v.name, location:v.geometry.location, address:v.vicinity};
+                    fireStations.push(fireStation);
+                    fireStationLocations.push(v.geometry.location);
+                });
+                getNearbyStations();
+            }
+        });   
+     }
+     
+     function getNearbyStations(){
+         stationsNearby = [];
+         //use DistanceMatrix API to check distances
+         distmatrix.getDistanceMatrix({
+                origins: fireStationLocations,
+                destinations: [geocodedAddress],
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.IMPERIAL
+            },
+            function(results, status) {
+                if (status == google.maps.DistanceMatrixStatus.OK) {
+                    $.each(fireStations, function(index, fireStation) {
+                        // 8,050 meters = 5 miles - this is actual road distance which is rad
+                        var distanceToAddress = results.rows[index].elements[0].distance.value;
+                        var distanceText = results.rows[index].elements[0].distance.text; 
+                        if (distanceToAddress < 17000) {
+                            //if any are within 5 road miles flag that nearbyStation is found
+                            fireStation.distance = distanceToAddress;
+                            fireStation.distanceText = distanceText;
+                            stationsNearby.push(fireStation);
+                        }
+                    });
+                    stationsNearby.sort(function(a, b) { return parseFloat(a.distance) - parseFloat(b.distance) });
+                    displayStationsNearby();
+                    listFireStations();
+                }
+            });
+     }
+      
+     function displayStationsNearby(){
+        $.each(stationsNearby, function(index, fireStation){
+            displayMarker(fireStation.name,fireStation.address,fireStation.location,"fire");
+        });
+     }
+      
+     function displayMarker(name,address,latlng,icon){
+        var icons = {standard:'img/location-marker.png',fire:'img/firemen.png'};
+        marker = new google.maps.Marker({
+                   position: latlng,
+                   map: map,
+                   title: name,
+                   icon: icons[icon]
+                 });
+        marker.setMap(map);
+        markers.push(marker);
+//        var infowindow = new google.maps.InfoWindow({content: name + "<br \>" + address});
+//        infowindow.open(map,marker);
+     }
+    
+     function listFireStations(){
+         $.each(stationsNearby, function(index, station){
+             $('#fireStationList').append('<li>' + station.name + "-" + station.distanceText + '</li>');
+         });
+     }         
+     
+     function clearExisting(){
+        try{
+          map.setCenter(centerPos);
+          map.setZoom(7);
+          markers.forEach(function(mark){
+              mark.setMap(null);
+          });
+          $("#fireStationList").empty();    
+          infowindow.close();
+        } catch(e) {}
+     }
+      
+     google.maps.event.addDomListener(window, 'load', initialize);
+   </script>
+  </head>
+  
+  
+  <body>
+    <div id="sidebar" class="column one-third">
+        <strong>Address: </strong>
+        <input id="address" size="40" />     
+        <input type="button" value="Map" id="createButton" onclick="geocode()"/>
+        <input type="button" value="Reset" id="resetButton" onclick="clearExisting()"/>
+        <div id="fireStationListing">
+            <h5>Fire Stations</h5>
+            <ul id="fireStationList">
+            </ul>
+        </div>
+    </div>
+      
+    <div id="map_canvas" class="column two-thirds">
+    </div>
+  </body>
+  
+</html>
+
+
