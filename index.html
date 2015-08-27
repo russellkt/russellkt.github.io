@@ -18,11 +18,16 @@
     }
    </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script> 
+  <script type="text/javascript" src="http://geoxml3.googlecode.com/svn/branches/polys/geoxml3.js"></script>
+
   <script type="text/javascript">
     var map;
+    var dataTable;
     var geocodedAddress;
     var geocoder = new google.maps.Geocoder();
+    var fusionTableId = '14jxvpzIrg3F6f5gF33bGHs_7VXxPgouLPRuepX2V';
     var service;
     var distmatrix;
     var centerPos;
@@ -31,8 +36,11 @@
     var fireStationLocations;
     var stationsNearby;    
     var markers = new Array();
-
-    function initialize() {
+    // Loading Visualization package version 1
+    google.load('visualization', '1');
+    google.setOnLoadCallback(setupMap);
+    
+    function setupMap(){
        var lat = 33.0672;
        var lng = -86.791;
        centerPos = new google.maps.LatLng(lat, lng);
@@ -41,12 +49,13 @@
          zoom: 7,
          mapTypeId: google.maps.MapTypeId.ROADMAP
        };
-       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-       service = new google.maps.places.PlacesService(map);
        distmatrix = new google.maps.DistanceMatrixService();
-     }
+       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    }
+        
+    function initialize() {}
      
-     function geocode(){
+    function geocode(){
        clearExisting();
        address = document.getElementById("address").value;
        geocoder.geocode( { 'address': address}, function(results, status) {
@@ -61,30 +70,37 @@
          }
        });
      }
-           
      function getFireStationsInArea(){
-        // find fire stations and duration/distance from location within a 10 mile as-the-crow-flies radius
-        service.nearbySearch({
-            location: geocodedAddress,
-            radius: 16000,
-            name: 'fire',
-            keyword: 'fire department',
-            types: ['fire_station']
-        }, function(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
-                fireStations = [];
-                fireStationLocations = [];
-                // pull out each fire departments' LatLng
-                $.each(results, function(i, v) {
-                    var fireStation = {name:v.name, location:v.geometry.location, address:v.vicinity};
-                    fireStations.push(fireStation);
-                    fireStationLocations.push(v.geometry.location);
-                });
-                getNearbyStations();
+         var queryString = "SELECT * FROM " + fusionTableId + " ORDER BY ST_DISTANCE(Location, LATLNG" + geocodedAddress +") LIMIT 10";
+         var queryEscaped = encodeURIComponent(queryString);
+         console.log(queryString);
+         var query = new google.visualization.Query(
+                         'http://www.google.com/fusiontables/gvizdata?tq=' +
+                          queryEscaped);
+         
+         query.send(function(response) {
+            dataTable = response.getDataTable();
+            if (dataTable && dataTable.getNumberOfRows()) {
+                populateFireStations();
             }
-        });   
+         });
      }
      
+     function populateFireStations(){
+         fireStations = [];
+         fireStationLocations = [];
+         for(i=0; i<10; i++){
+             var fireStation = { name:dataTable.getValue(i,1), 
+                                 latitude:parseFloat(dataTable.getValue(i,5)), 
+                                 longitude:dataTable.getValue(i,4),
+                                 address:dataTable.getValue(i,3)};
+             fireStation.location = new google.maps.LatLng(fireStation.latitude,fireStation.longitude);
+             fireStations.push(fireStation);
+             fireStationLocations.push(fireStation.location);
+         }
+         getNearbyStations();
+     }
+           
      function getNearbyStations(){
          stationsNearby = [];
          //use DistanceMatrix API to check distances
@@ -131,7 +147,6 @@
         marker.setMap(map);
         markers.push(marker);
         var infowindow = new google.maps.InfoWindow({content: name + "<br \>" + address});
-//        infowindow.open(map,marker);
      }
     
      function listFireStations(){
