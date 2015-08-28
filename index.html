@@ -27,7 +27,7 @@
     var dataTable;
     var geocodedAddress;
     var geocoder = new google.maps.Geocoder();
-    var fusionTableId = '14jxvpzIrg3F6f5gF33bGHs_7VXxPgouLPRuepX2V';
+    var fusionTableId = '15zA_cdO-Nb6UjgyqKR8F22a4Of4xPzA4FcMb9HxY';
     var service;
     var distmatrix;
     var centerPos;
@@ -91,8 +91,8 @@
          fireStationLocations = [];
          for(i=0; i<10; i++){
              var fireStation = { name:dataTable.getValue(i,1), 
-                                 latitude:parseFloat(dataTable.getValue(i,5)), 
-                                 longitude:dataTable.getValue(i,4),
+                                 latitude:parseFloat(dataTable.getValue(i,4)), 
+                                 longitude:dataTable.getValue(i,5),
                                  address:dataTable.getValue(i,3)};
              fireStation.location = new google.maps.LatLng(fireStation.latitude,fireStation.longitude);
              fireStations.push(fireStation);
