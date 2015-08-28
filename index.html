@@ -138,15 +138,19 @@
       
      function displayMarker(name,address,latlng,icon){
         var icons = {standard:'img/location-marker.png',fire:'img/firemen.png'};
-        marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
                    position: latlng,
                    map: map,
                    title: name,
-                   icon: icons[icon]
+                   icon: icons[icon],
+                   clickable: true
                  });
+        marker.info = new google.maps.InfoWindow({content: name + "<br \>" + address});
+        google.maps.event.addListener(marker, 'click', function() {
+            this.info.open(map,marker);
+        });
         marker.setMap(map);
         markers.push(marker);
-        var infowindow = new google.maps.InfoWindow({content: name + "<br \>" + address});
      }
     
      function listFireStations(){
