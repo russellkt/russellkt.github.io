@@ -27,7 +27,7 @@
     var dataTable;
     var geocodedAddress;
     var geocoder = new google.maps.Geocoder();
-    var fusionTableId = '15zA_cdO-Nb6UjgyqKR8F22a4Of4xPzA4FcMb9HxY';
+    var fusionTableId = '1zLRiJwiWQotCP9f51sy_AByZEuDLcd8Zyk5tok1K';
     var service;
     var distmatrix;
     var centerPos;
@@ -71,7 +71,7 @@
        });
      }
      function getFireStationsInArea(){
-         var queryString = "SELECT * FROM " + fusionTableId + " ORDER BY ST_DISTANCE(Location, LATLNG" + geocodedAddress +") LIMIT 10";
+         var queryString = "SELECT * FROM " + fusionTableId + " ORDER BY ST_DISTANCE(location, LATLNG" + geocodedAddress +") LIMIT 10";
          var queryEscaped = encodeURIComponent(queryString);
          console.log(queryString);
          var query = new google.visualization.Query(
@@ -90,10 +90,10 @@
          fireStations = [];
          fireStationLocations = [];
          for(i=0; i<10; i++){
-             var fireStation = { name:dataTable.getValue(i,1), 
-                                 latitude:parseFloat(dataTable.getValue(i,4)), 
-                                 longitude:dataTable.getValue(i,5),
-                                 address:dataTable.getValue(i,3)};
+             var fireStation = { name:dataTable.getValue(i,0), 
+                                 latitude:parseFloat(dataTable.getValue(i,8)), 
+                                 longitude:dataTable.getValue(i,7),
+                                 address:dataTable.getValue(i,1)};
              fireStation.location = new google.maps.LatLng(fireStation.latitude,fireStation.longitude);
              fireStations.push(fireStation);
              fireStationLocations.push(fireStation.location);
