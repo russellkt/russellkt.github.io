@@ -102,11 +102,12 @@
      }
 
      function getNearbyStations(){
+        address = document.getElementById("address").value;
          stationsNearby = [];
          //use DistanceMatrix API to check distances
          distmatrix.getDistanceMatrix({
                 origins: fireStationLocations,
-                destinations: [geocodedAddress],
+                destinations: [address],
                 travelMode: google.maps.TravelMode.DRIVING,
                 unitSystem: google.maps.UnitSystem.IMPERIAL
             },
