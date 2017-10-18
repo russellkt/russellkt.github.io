@@ -30,6 +30,7 @@
     var fusionTableId = '1LRAHcRP_IdizIAyYHJc0Ku9Z0zvdHa68-AbKVErT';
     var service;
     var distmatrix;
+    var directionService;
     var centerPos;
     var place;
     var fireStations;
@@ -49,7 +50,7 @@
          zoom: 6,
          mapTypeId: google.maps.MapTypeId.ROADMAP
        };
-       distmatrix = new google.maps.DistanceMatrixService();
+       directionsService = new google.maps.DirectionsService();
        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     }
 
@@ -89,7 +90,7 @@
      function populateFireStations(){
          fireStations = [];
          fireStationLocations = [];
-         for(i=0; i<10; i++){
+         for(i=0; i<6; i++){
              var fireStation = { name:dataTable.getValue(i,0),
                                  latitude:parseFloat(dataTable.getValue(i,8)),
                                  longitude:dataTable.getValue(i,7),
@@ -102,33 +103,32 @@
      }
 
      function getNearbyStations(){
-        address = document.getElementById("address").value;
-         stationsNearby = [];
-         //use DistanceMatrix API to check distances
-         distmatrix.getDistanceMatrix({
-                origins: fireStationLocations,
-                destinations: [address],
-                travelMode: google.maps.TravelMode.DRIVING,
+        stationsNearby = [];
+        var address = document.getElementById("address").value;
+        var current = 1;
+        $.each(fireStations, function(index, fireStation){
+            var request = {
+                origin: address,
+                destination: fireStation.location,
+                travelMode: 'DRIVING',
                 unitSystem: google.maps.UnitSystem.IMPERIAL
-            },
-            function(results, status) {
-                if (status == google.maps.DistanceMatrixStatus.OK) {
-                    $.each(fireStations, function(index, fireStation) {
-                        // 8,050 meters = 5 miles - this is actual road distance which is rad
-                        var distanceToAddress = results.rows[index].elements[0].distance.value;
-                        var distanceText = results.rows[index].elements[0].distance.text;
-                        if (distanceToAddress < 17000) {
-                            //if any are within 5 road miles flag that nearbyStation is found
-                            fireStation.distance = distanceToAddress;
-                            fireStation.distanceText = distanceText;
-                            stationsNearby.push(fireStation);
-                        }
-                    });
+            };
+            directionsService.route(request, function(result, status) {
+                var distanceToAddress = result.routes[0].legs[0].distance.value;
+                var distanceText = result.routes[0].legs[0].distance.text;
+                if (distanceToAddress < 17000) {
+                    fireStation.distance = distanceToAddress;
+                    fireStation.distanceText = distanceText;
+                    stationsNearby.push(fireStation);
+                }              
+                current++;
+                if(current > 6){                
                     stationsNearby.sort(function(a, b) { return parseFloat(a.distance) - parseFloat(b.distance) });
                     displayStationsNearby();
-                    listFireStations();
-                }
+                    listFireStations();    
+                }  
             });
+        });
      }
 
      function displayStationsNearby(){
