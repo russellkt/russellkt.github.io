@@ -123,12 +123,16 @@
                 unitSystem: google.maps.UnitSystem.IMPERIAL
             };
             directionsService.route(request, function(result, status) {
-                var distanceToAddress = result.routes[0].legs[0].distance.value;
-                var distanceText = result.routes[0].legs[0].distance.text;
-                if (distanceToAddress < 17000) {
-                    fireStation.distance = distanceToAddress;
-                    fireStation.distanceText = distanceText;
-                    stationsNearby.push(fireStation);
+                try{
+                    var distanceToAddress = result.routes[0].legs[0].distance.value;
+                    var distanceText = result.routes[0].legs[0].distance.text;
+                    if (distanceToAddress < 17000) {
+                        fireStation.distance = distanceToAddress;
+                        fireStation.distanceText = distanceText;
+                        stationsNearby.push(fireStation);
+                    }
+                } catch(e) {
+                    console.log("Unable to calculate distance to " + fireStation.name);
                 }              
                 current++;
                 if(current > 6){                
