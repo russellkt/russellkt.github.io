@@ -120,13 +120,21 @@
                 origin: address,
                 destination: fireStation.location,
                 travelMode: 'DRIVING',
-                unitSystem: google.maps.UnitSystem.IMPERIAL
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
+                provideRouteAlternatives: true
             };
             directionsService.route(request, function(result, status) {
                 try{
                     var distanceToAddress = result.routes[0].legs[0].distance.value;
                     var distanceText = result.routes[0].legs[0].distance.text;
-                    if (distanceToAddress < 17000) {
+                    $.each(result.routes, function(index, route){ 
+                        var routeDistance  = route.legs[0].distance;
+                        if(routeDistance.value < distanceToAddress){
+                            distanceToAddress = routeDistance.value;
+                            distanceText = routeDistance.text;
+                        }    
+                    });
+                    if(distanceToAddress < 17000){
                         fireStation.distance = distanceToAddress;
                         fireStation.distanceText = distanceText;
                         stationsNearby.push(fireStation);
