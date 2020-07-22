@@ -165,15 +165,20 @@
                    map: map,
                    title: name,
                    icon: icons[icon],
-                   clickable: true
+                   clickable: true,
+                   draggable: true
                  });
         marker.info = new google.maps.InfoWindow({content: name + "<br \>" + address});
         google.maps.event.addListener(marker, 'click', function() {
             this.info.open(map,marker);
         });
+        google.maps.event.addListener(marker, 'dragend', function() {
+            console.log("new marker position -> " + marker.getPosition());
+        });
         marker.setMap(map);
         markers.push(marker);
      }
+        
 
      function listFireStations(){
          $.each(stationsNearby, function(index, station){
