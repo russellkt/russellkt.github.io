@@ -15,7 +15,7 @@ columns:
   format: '{:%Y-%m-%d}'
   hide: false
   prefilter: []
-  rename: Last Inspection Date
+  rename: Next Inspection Date
   type: date
 - category: Chosen Data
   column: riskInspectionRequestedDate
@@ -25,7 +25,7 @@ columns:
   format: '{:%Y-%m-%d}'
   hide: false
   prefilter: []
-  rename: Next Inspection Date
+  rename: Last Inspection Date
   type: date
 - category: Chosen Data
   column: policyTypeName
