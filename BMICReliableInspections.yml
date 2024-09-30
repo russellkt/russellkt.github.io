@@ -1,0 +1,460 @@
+columns:
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: RRI Acct#
+  type: str
+- category: Chosen Data
+  column: policyNumber
+  dataframe: policies
+  description: The policy number.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: Inspection Type 1
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: Inspection Type 2
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: Inspection Type 3
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: RC 1
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: RC 2
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: RC 3
+  type: str
+- category: Chosen Data
+  column: agencyNumber
+  currency: false
+  dataframe: agencies
+  description: The agency number.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: agentName
+  dataframe: agencies
+  description: The name of the agency or agent (whichever is tied to policies).
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: agencyName
+  dataframe: agencies
+  description: The name of the agency. If agencies are tied to policies, 'Agency Name'
+    will match 'Agent Name'.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: primaryPolicyholderName
+  dataframe: primary_policyholders
+  description: The primary policyholder's name.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: riskAddressLine1
+  dataframe: properties
+  description: The first line risk address.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: riskAddressLine2
+  dataframe: properties
+  description: The second line risk address.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: riskCity
+  dataframe: properties
+  description: The risk's city.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: riskState
+  dataframe: properties
+  description: The risk's state.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: riskCounty
+  dataframe: properties
+  description: The risk's county.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: riskZip
+  dataframe: properties
+  description: The risk's zip.
+  fill: ''
+  format: '{0[0]}{0[1]}{0[2]}{0[3]}{0[4]}'
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: primaryPolicyholderPhone
+  dataframe: primary_policyholders
+  description: The policyholder's primary phone number.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: primaryPolicyholderAddressLine1
+  dataframe: primary_policyholders
+  description: The policyholder's first line address.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: primaryPolicyholderCity
+  dataframe: primary_policyholders
+  description: The policyholder's city.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: primaryPolicyholderState
+  dataframe: primary_policyholders
+  description: The policyholder's state.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: primaryPolicyholderZip
+  dataframe: primary_policyholders
+  description: The policyholder's zip.
+  fill: ''
+  format: '{0}'
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: itemName
+  dataframe: items
+  description: The name of the line item.
+  fill: ''
+  hide: false
+  prefilter: []
+  type: str
+- category: Chosen Data
+  column: itemInforceLimit
+  currency: true
+  dataframe: item_state
+  description: The limit that is inforce for particular item at a point in time or
+    at the end of the date range.
+  fill: ''
+  hide: false
+  prefilter: []
+  rename: Coverage
+  type: float
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: Year Built
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: Assigned Date
+  type: str
+- category: Chosen Data
+  column: riskInspectionRequestedDate
+  dataframe: properties
+  description: The risk's requested inspection date.
+  fill: ''
+  format: '{:%Y-%m-%d}'
+  hide: false
+  prefilter: []
+  type: date
+- category: Chosen Data
+  column: riskNextInspectionDate
+  dataframe: properties
+  description: The risk's next inspection date.
+  fill: ''
+  format: '{:%Y-%m-%d}'
+  hide: false
+  prefilter: []
+  type: date
+- category: Chosen Data
+  column: inceptionDate
+  dataframe: revisions
+  description: The date that the policy was first issued.
+  fill: ''
+  format: '{:%Y-%m-%d}'
+  hide: false
+  prefilter: []
+  type: date
+- category: Chosen Data
+  column: policyTypeName
+  dataframe: policy_types
+  description: The name of the policy type.
+  fill: ''
+  hide: false
+  prefilter: []
+  rename: Special Attention
+  type: str
+- category: Chosen Data
+  column: staticField
+  dataframe: ''
+  description: A static field that will fill with given value.
+  fill: ' '
+  prefilter: []
+  rename: RUSH
+  type: str
+- category: Chosen Data
+  column: riskInspectionRequestedDate
+  dataframe: properties
+  description: The risk's requested inspection date.
+  fill: ''
+  format: '{:%Y}'
+  hide: false
+  prefilter: []
+  rename: Last Inspection Year
+  type: date
+- category: Chosen Data
+  column: itemQuestion
+  dataframe: ''
+  description: Collection of Supplemental Questions and Rating Categories.
+  fill: ''
+  prefilter:
+  - occupancy
+  - Occupancy
+  - OccupancySelectedHTML
+  rename: Occupancy
+  type: str
+- category: Chosen Data
+  column: expirationDate
+  dataframe: revisions
+  description: The expiration date for the policy term.
+  fill: ''
+  format: '{:%Y-%m-%d}'
+  hide: false
+  prefilter: []
+  rename: Renewal Date
+  type: date
+rules:
+- action: ==
+  column: Special Attention
+  type: filter
+  validValues: true
+  values:
+  - Farm Dwelling
+  - Dwelling Fire
+  - Manufactured Home
+- action: ==
+  column: riskCounty
+  type: filter
+  validValues: true
+  values:
+  - Autauga
+  - Barbour
+  - Bibb
+  - Blount
+  - Bullock
+  - Butler
+  - Calhoun
+  - Chambers
+  - Cherokee
+  - Chilton
+  - Choctaw
+  - Clarke
+  - Clay
+  - Cleburne
+  - Coffee
+  - Colbert
+  - Conecuh
+  - Coosa
+  - Covington
+  - Crenshaw
+  - Cullman
+  - Dale
+  - Dallas
+  - Dekalb
+  - Elmore
+  - Escambia
+  - Etowah
+  - Fayette
+  - Franklin
+  - Geneva
+  - Greene
+  - Hale
+  - Henry
+  - Houston
+  - Jackson
+  - Jefferson
+  - Lamar
+  - Lawrence
+  - Lee
+  - Lowndes
+  - Macon
+  - Madison
+  - Marengo
+  - Marion
+  - Marshall
+  - Monroe
+  - Montgomery
+  - Morgan
+  - Perry
+  - Pickens
+  - Pike
+  - Randolph
+  - Russell
+  - Shelby
+  - Sumter
+  - Talladega
+  - Tallapoosa
+  - Tuscaloosa
+  - Walker
+  - Washington
+  - Wilcox
+  - Winston
+  - St. Clair
+  - Lauderdale
+  - Limestone
+- action: ==
+  column: itemName
+  type: filter
+  validValues: true
+  values:
+  - Cov A - Dwelling - Fire
+  - Rating Information
+- columns:
+  - itemName
+  type: remove
+- action: <=
+  column: riskNextInspectionDate
+  type: filter
+  validValues: true
+  values:
+  - Renewal Date
+- action: <
+  column: Renewal Date
+  type: filter
+  validValues: true
+  values:
+  - '2025-04-01'
+- action: '>='
+  column: Renewal Date
+  type: filter
+  validValues: true
+  values:
+  - '2024-02-01'
+- action: contains
+  column: Special Attention
+  fill: Owner
+  name: Occupancy
+  type: conditional
+  validValues: true
+  values:
+  - Farm
+  - Manufactured
+- columns:
+  - Last Inspection Year
+  type: remove
+- actions:
+    Assigned Date: first
+    Coverage: sum
+    Inspection Type 1: first
+    Inspection Type 2: first
+    Inspection Type 3: first
+    Last Inspection Year: first
+    Occupancy: alpha max
+    RC 1: first
+    RC 2: first
+    RC 3: first
+    RRI Acct#: first
+    RUSH: first
+    Renewal Date: first
+    Special Attention: first
+    Year Built: first
+    agencyName: first
+    agencyNumber: first
+    agentName: first
+    inceptionDate: first
+    itemName: first
+    policyNumber: first
+    primaryPolicyholderAddressLine1: first
+    primaryPolicyholderCity: first
+    primaryPolicyholderName: first
+    primaryPolicyholderPhone: first
+    primaryPolicyholderState: first
+    primaryPolicyholderZip: first
+    riskAddressLine1: first
+    riskAddressLine2: first
+    riskCity: first
+    riskCounty: first
+    riskInspectionRequestedDate: first
+    riskNextInspectionDate: first
+    riskState: first
+    riskZip: first
+  columns:
+  - policyNumber
+  summary: false
+  type: groupby
+  valid: true
+  validationMessage: ''
